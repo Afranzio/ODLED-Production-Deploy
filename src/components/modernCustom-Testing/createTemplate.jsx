@@ -175,9 +175,10 @@ export default function CreateTemplate({accName, selectedTemp, reloader, ratioNu
         evn : evnpoint
       }
       allItems.push(b)
-      console.log(allItems) 
       setListItem(allItems)
     }
+    setAdvtxt(true)
+    setAdvtxt(false)
   }
 
   function addText(txt){
@@ -193,6 +194,8 @@ export default function CreateTemplate({accName, selectedTemp, reloader, ratioNu
     }
     allItems.push(b)
     setListItem(allItems)
+    setAdvtxt(true)
+    setAdvtxt(false)
   }
 
   const onImageChange = (event) => {
@@ -328,17 +331,22 @@ export default function CreateTemplate({accName, selectedTemp, reloader, ratioNu
     console.log(temp)
   }
 
-  function checkLast(each){ 
-    if(each.id === listItem[listItem.length-1].id){
-      window.location="#/finalPreview";
+  function checkLast(each, check){ 
+    if(check === "hereView"){
       setLoading(false)
-    }
-    else{
       return null
+    }else{
+      if(each.id === listItem[listItem.length-1].id){
+        window.location="#/finalPreview";
+        setLoading(false)
+      }
+      else{
+        return null
+      }
     }
   }
 
-  const handleCompleteUploader = () => {
+  const handleCompleteUploader = (check) => {
     if(listItem.length !== 0){
       setLoading(true)
     listItem.map(each => {
@@ -380,16 +388,16 @@ export default function CreateTemplate({accName, selectedTemp, reloader, ratioNu
                               texts: each.texts,
                               id: each.id,
                               interval:  each.interval? Number(each.interval) : 1,
-                              transitionTime: each.transitionTime? Number(each.transitionTime) : 350,
+                              transitionTime: each.transitionTime? Number(each.transitionTime) : 3.5,
                               axis: each.axis ? each.axis : "horizontal"
-                            }}, { merge: true }).then(checkLast(each))
+                            }}, { merge: true }).then(checkLast(each, check))
                         }
                     })
                   }
                 )
-              }
-              else{
-                db.collection(accName).doc(display).set({
+              }else{
+                console.log(each.imageURL)
+                db.collection(accName).doc(display).update({
                   [each.id]:{
                     timestamp : firebase.firestore.FieldValue.serverTimestamp(),
                     size: {
@@ -405,9 +413,9 @@ export default function CreateTemplate({accName, selectedTemp, reloader, ratioNu
                     texts: each.texts,
                     id: each.id,
                     interval: each.interval? Number(each.interval) : 1,
-                    transitionTime: each.transitionTime? Number(each.transitionTime) : 350,
+                    transitionTime: each.transitionTime? Number(each.transitionTime) : 3.5,
                     axis: each.axis ? each.axis : "horizontal"
-                  }}, { merge: true }).then(checkLast(each))
+                  }}, { merge: true }).then(checkLast(each, check))
               }
             }
             else if (each.fileType === "text" && each.texts !== ""){
@@ -427,9 +435,9 @@ export default function CreateTemplate({accName, selectedTemp, reloader, ratioNu
                   texts: each.texts,
                   id: each.id,
                   interval: each.interval? Number(each.interval) : 1,
-                  transitionTime: each.transitionTime? Number(each.transitionTime) : 350,
+                  transitionTime: each.transitionTime? Number(each.transitionTime) : 3.5,
                   axis: each.axis ? each.axis : "horizontal"
-                }}, { merge: true }).then(checkLast(each))
+                }}, { merge: true }).then(checkLast(each, check))
             }
         }
     )
@@ -462,7 +470,7 @@ export default function CreateTemplate({accName, selectedTemp, reloader, ratioNu
                 texts: each.texts,
                 id: each.id,
                 interval: 1,
-                transitionTime: 350,
+                transitionTime: 3.5,
                 axis: "horizontal"
             }
           }}, { merge: true })
@@ -525,9 +533,8 @@ export default function CreateTemplate({accName, selectedTemp, reloader, ratioNu
                       <div className="changeDisplay">
                         <div className="preview" >
                           {`${ratioNum.w} x ${ratioNum.h}`}
-                          {console.log(listItem)}
                           <div style={{ width: ratios.w/value, height: ratios.h/value, border: "1px solid black"}} >
-                            <Viewer setnewFile={addNewFiles} setcontext={contexted} intervalperiod={changeNewInterval} transitionTime={changeNewTrans} setMaster={masterHandler} axis={changeNewAxis} tryList={listItem} ratioStyle={ratios} usrpos={userPosition} usrsize={userSize} decide={value} removeDiv={deleteDiv} change={items} dragged={setPosition} resized={setSize} bgc={BGC} bgi={BGI} usr={accName} dis={display} />
+                            <Viewer setnewFile={addNewFiles} setcontext={contexted} intervalperiod={changeNewInterval} transitionTime={changeNewTrans} setMaster={masterHandler} axis={changeNewAxis} tryList={listItem} ratioStyle={ratios} usrpos={userPosition} usrsize={userSize} decide={value} removeDiv={deleteDiv} change={items} dragged={setPosition} resized={setSize} fromView={handleCompleteUploader} bgc={BGC} bgi={BGI} usr={accName} dis={display} />
                           </div>
                         </div>
                       </div>

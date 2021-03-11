@@ -36,7 +36,7 @@ const Alert = forwardRef((props, ref) => {
             >
               Back
             </Button>
-            <a href="/"><Button className="homeButton" variant="primary">Retry</Button></a>
+            {/* <a href="/"><Button className="homeButton" variant="primary">Retry</Button></a> */}
           </Modal.Footer>
         </Modal>
       </div>

@@ -1,9 +1,12 @@
-import React from 'react';
+import React,{useEffect,useRef} from 'react';
 import Ratio from 'react-ratio';
 import { Rnd } from 'react-rnd'
 import { Textfit } from 'react-textfit';
 import ReactHtmlParser from 'react-html-parser';
 import {MyVerticallyCenteredModal} from './Models'
+
+// Alert
+import Alert from '../alert';
 
 // Image Carousle
 import { Carousel } from "react-responsive-carousel";
@@ -13,7 +16,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import {db, storage} from '../../secure/firebase'
 import firebase from 'firebase';
 
-export default function Viewer({ratioStyle, change, decide, removeDiv, dragged, resized,  bgc, bgi, usr, tryList, setcontext, usrpos, dis, usrsize, intervalperiod, setnewFile, transitionTime, axis, setMaster}){
+export default function Viewer({ratioStyle, change, decide, removeDiv, dragged, resized,  bgc, bgi, usr, tryList, setcontext, usrpos, dis, usrsize, intervalperiod, setnewFile, transitionTime, axis, setMaster, fromView}){
 
   const [panel, setPanel] = React.useState(false)
   const [eachD, setEachD] = React.useState({})
@@ -27,61 +30,85 @@ export default function Viewer({ratioStyle, change, decide, removeDiv, dragged, 
   const [count, setCount] = React.useState(0)
   const [loading, setLoading] = React.useState(false)
 
+  const [msg, setMsg] = React.useState("")
+
+  const ref = useRef(null);
+
+  useEffect(() => {
+
+  }, [tryList])
+
+  const handleClick = () => {
+    ref.current.handleShow();
+};
+
   async function mergeAndPush(e, data){
     const snapshot = await db.collection(usr).doc(dis).get()
-    Object.keys(snapshot.data()).map(each => {
-      if(data.id === each){
-        setLoading(true)
-        let imgurl = snapshot.data()[each].imageURL;
-        let prefix = new Date().getTime();
-        const uploadTask = storage.ref(`${usr}/${prefix + e.target.files[0].name}`).put(e.target.files[0]);
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            //prograss Bar Math
-            Math.round(snapshot.bytesTransferred/ snapshot.totalBytes * 100);
-          },
-          (error) => {
-              console.log(error);
-              alert(error.message)
-          },
-          ()=> {
-            storage
-                .ref(usr)
-                .child(prefix + e.target.files[0].name)
-                .getDownloadURL()
-                .then(url => {
-                    imgurl.push(url)
-                    if(dis && usr){
-                      db.collection(usr).doc(dis).update({
-                        [data.id]:{
-                          timestamp : firebase.firestore.FieldValue.serverTimestamp(),
-                          size: {
-                              width: data.size.width,
-                              height: data.size.height
-                          },
-                          position: {
-                              x: data.position.x,
-                              y: data.position.y
-                          },
-                          imageURL: imgurl,
-                          fileType: data.fileType,
-                          texts: data.texts,
-                          id: data.id,
-                          interval: data.interva1 ? data.interva1 : 1.5,
-                          transitionTime: data.transitionTime ? data.transitionTime : 3.5,
-                          axis: data.axis ? data.axis : 'horizontal',
+    if(snapshot.data()){
+      if(Object.keys(snapshot.data()).indexOf(data.id) !== -1){
+        Object.keys(snapshot.data()).map(each => {
+          if(data.id === each){
+            setLoading(true)
+            let imgurl = snapshot.data()[each].imageURL;
+            let prefix = new Date().getTime();
+            const uploadTask = storage.ref(`${usr}/${prefix + e.target.files[0].name}`).put(e.target.files[0]);
+            uploadTask.on(
+              "state_changed",
+              (snapshot) => {
+                //prograss Bar Math
+                Math.round(snapshot.bytesTransferred/ snapshot.totalBytes * 100);
+              },
+              (error) => {
+                  console.log(error);
+                  alert(error.message)
+              },
+              ()=> {
+                storage
+                    .ref(usr)
+                    .child(prefix + e.target.files[0].name)
+                    .getDownloadURL()
+                    .then(url => {
+                        imgurl.push(url)
+                        if(dis && usr){
+                          db.collection(usr).doc(dis).update({
+                            [data.id]:{
+                              timestamp : firebase.firestore.FieldValue.serverTimestamp(),
+                              size: {
+                                  width: data.size.width,
+                                  height: data.size.height
+                              },
+                              position: {
+                                  x: data.position.x,
+                                  y: data.position.y
+                              },
+                              imageURL: imgurl,
+                              fileType: data.fileType,
+                              texts: data.texts,
+                              id: data.id,
+                              interval: data.interva1 ? data.interva1 : 1.5,
+                              transitionTime: data.transitionTime ? data.transitionTime : 3.5,
+                              axis: data.axis ? data.axis : 'horizontal',
+                            }
+                          },{ merge: true })
                         }
-                      },{ merge: true })
+                        setnewFile(snapshot.data()[each], url);
+                        setLoading(false)
                     }
-                    setnewFile(snapshot.data()[each], url);
-                    setLoading(false)
+                  )
                 }
               )
-            }
-          )
+          }
+        })
+      }else {
+        fromView("hereView")
+        setLoading(false)
+        mergeAndPush(e, data)
       }
-    })
+    }else{
+      fromView("hereView")
+      setLoading(false)
+      mergeAndPush(e, data)
+    }
   }
 
   function setIntervalPeriod(givenInterval, data){
@@ -113,7 +140,7 @@ export default function Viewer({ratioStyle, change, decide, removeDiv, dragged, 
   function selectTag(post){
     if(post.texts !== ""){
       return  (
-        <div style={{width: post.size.width/decide , height: post.size.height/decide }} >
+        <div style={{width: post.size.width/decide , height: post.size.height/decide }} className="img" >
           <Textfit
             mode="multi"
             style={{height: "100%", border: "1px solid black"}}
@@ -151,6 +178,7 @@ export default function Viewer({ratioStyle, change, decide, removeDiv, dragged, 
       return(
         <video
           style={{width: "100%", height: "100%", border: "none"}}
+          className="img"
           autoPlay={true}
           controls={false}
           loop={post.imageURL.length === 1 ? true : false}
@@ -224,6 +252,7 @@ export default function Viewer({ratioStyle, change, decide, removeDiv, dragged, 
       {tryList.length !== 0 ? 
         <MyVerticallyCenteredModal doing={loading} setDoing={setLoading} MaP={mergeAndPush} SIP={setIntervalPeriod} SIT={transitionTime} SIA={axis} user={usr} show={panel} data={eachD} width={setWidth} height={setHeight} x={setX} y={setY} pixels={eachD.size} position={eachD.position} setShows={()=>{setPanel(false)}} sender={send} />      
       : null}
+      <Alert className="alert" message={msg} ref={ref} />
     </div>
   )
 }
