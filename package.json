@@ -50,7 +50,8 @@
     "react-eject": "react-scripts eject",
     "electron-build": "electron-builder --win --ia32 --x64 -p always ",
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
     "extends": [
