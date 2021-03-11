@@ -1,0 +1,302 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.grid{
+    overflow: hidden;
+}
+
+.grid:hover{
+    border: 1px solid black;
+}
+
+/* .grid img, .grid video, .grid embed{
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    display: block;
+  } */
+
+.grid *{
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+}
+
+/* Old CSS */
+/* @import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800'); */
+
+* {
+  margin: 0em;
+  padding: 0em;
+}
+body {  
+  display: block;
+  background: #56aaf8 !important;
+  min-height: 100vh;
+  display: flex;
+  font-weight: 400;
+  /* font-family: 'Arial Narrow','Franklin Gothic Medium', Arial, sans-serif; */
+}
+
+h1,h2,h3,h4,h5,h6,label,span {
+  font-weight: 500;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+body, html, .App, #root, .auth-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.navbar-light {
+  background-color: #ffffff;
+  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+}
+
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: left;
+}
+
+.auth-inner {
+  width: 100%;
+  margin: auto;
+  background: #ffffff;
+  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+  padding: 40px 55px 45px 55px;
+  border-radius: 15px;
+  transition: all .3s;
+  text-align: center;
+}
+
+.auth-wrapper .form-control:focus {
+  border-color: #167bff;
+}
+
+.form-control{
+  margin: 1em;
+}
+
+.auth-wrapper h3 {
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+  padding-bottom: 20px;
+}
+
+.custom-control-label {
+  font-weight: 400;
+}
+
+.forgot-password,
+.forgot-password a {
+  text-align: right;
+  font-size: 13px;  
+  padding-top: 10px;
+  color: #7f7d7d;
+  margin: 0;
+}
+
+.forgot-password a {
+  color: #167bff;
+}
+
+.main{
+  text-align: center;
+}
+
+.buttons input{
+  margin: 0em 2em;
+}
+
+.container{
+  height: 2em;
+}
+
+.collapse ul li input{
+  margin-top: 1em;
+}
+
+.box{
+  border: 1px solid black;
+}
+
+.fill {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  min-width: 100%;
+  min-height: 100%;
+}
+.fill img {
+  flex-shrink: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+}
+
+.fill img.wide{
+  min-width: 100%;
+  min-height: 100%;
+  height: auto;
+}
+
+.fill img.tall {
+  min-height: 100%;
+  min-width: 100%;
+  width: auto;
+}
+
+.fill {
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+
+/* Layouts */
+
+.App {
+  text-align: center;
+  align-items: center;
+}
+
+/* Layouter */
+.grid:hover{
+  border: 1px solid black;
+} 
+
+input:focus{
+  border: none;
+}
+
+.logoPic{
+  width: 3em;
+}
+
+.navbar-nav li{
+  margin: 0 0.5em;
+}
+
+.navbar-nav li p{
+  padding-top: 1em;
+}
+
+input[type="button"]{
+  align-self: center;
+  padding: 0.1em;
+  margin: 0.2em;
+  font-size: 1em;
+}
+
+.grid img, .grid video, .grid embed{
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+}
+
+.main-container, embed, .grid{
+  overflow: hidden;
+}
+
+.table{
+  /* display: flex; */
+  justify-content: space-between;
+}
+
+.main_controller{
+  width: 100%;
+}
+
+/* Container */
+.tab{
+  min-height: 80%;
+}
+
+.table .tab .container{
+  min-width: inherit;
+}
+
+.table input{
+  width: 8em;
+}
+
+.fileInput{
+  margin-right: 7em;
+  overflow: hidden;
+}
+
+.tab .container{
+  min-width: 70vw;
+  margin-top: 1em;
+  border: 2px solid black;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  background-color: #d8d4d4;
+}
+
+.tab .container .preview{
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+/* Ratio Rnd */
+.layout{
+  margin: 1em 0em;
+  text-align: center;
+  justify-content: center;
+  border: 3px solid black;
+  background-color: #f2f2f2;
+  overflow: hidden;
+}
+
+/* css for Table Preview*/
+.main{
+  text-align: center;
+  justify-content: center;
+}
+
+.control input, .control select {
+  /* display: flex; */
+  flex-wrap: wrap;
+  /* min-width: 5em; */
+  margin: 0 1em;
+}
+
+.fixedDisplay{
+  text-align: center;
+  justify-content: center;
+  background-color: rgba(28, 91, 173, 0.493);
+  min-width: 100%;
+  /* min-height: 80vh; */
+  margin-top: 1em;
+  padding: 2.5% 0;
+}
+
+.changeDisplay{
+  display: block;
+  margin-left: 12.5%;
+  max-width: 75%;
+  min-height: 60vh;
+  border: 1px solid red;
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+}
+
+.Main-Logo{
+  color: white;
+}

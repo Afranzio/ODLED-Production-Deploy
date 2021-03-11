@@ -1,0 +1,33 @@
+  "main": "./public/electron.js",
+  "build": {
+    "appId": "devicefb",
+    "win": {
+      "target": "nsis",
+      "icon": "./public/od_logo.ico"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Afranzio",  
+        "repo": "odLed_template-online",
+        "token": "6f5089b4fff40420f5fde982236616589f97a293"
+      }
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": false,
+    "runAfterFinish": true,
+    "installerIcon": "./public/OD.jpg"
+  },
+  "homepage": "./",
+
+"build": "npm run react-build && npm run electron-build ",
+"start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\" "
+
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "electron": "^11.1.1",
+    "electron-builder": "^22.9.1",
+    "wait-on": "^5.2.1"
+  },
